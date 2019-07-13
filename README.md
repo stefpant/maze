@@ -3,8 +3,47 @@ Perfect and Braid mazes in haskell
 
 Maze construction using kruskal algorithm,then for braid search and remove dead ends.
 
-Inputs: M,N width/height of maze and [a,b]-->start,[c,d]-->goal state
+## Installing ghci and load module(inside terminal)
+* sudo apt-get install haskell-platform
+* ghci 
+* :load maze
 
-Function to combine inputs and print the solved maze not implemented yet! :)
+## Examples
+1. to show a Perfect Maze 5x6: putStr (showMaze (kruskal (makeMaze 5 6)) [])
+2. to show a Braid Maze 8x5: putStr (showMaze (braid (kruskal (makeMaze 8 5))) [])
 
-Should be two functions, one for perfect and one for braid maze!
+## Showing a solved maze
+
+### putStr (showSolvedMaze <flag> <width> <height> (<x1>,<y1>) (<x2>,<y2>)
+* flag: 0->perfect maze, 1->braid maze (else error)
+* (x1,y1): starting point(S)
+* (x2,y2): final point(F)
+
+## Examples with solved mazes
+1. for a 5x5 perfect maze and S=(0,0) and F=(4,4)
+        putStr (showSolvedMaze 0 5 5 (0,0) (4,4))
++---+---+---+---+---+
+| *   *   * |   |   |
++   +---+   +   +   +
+|   |   | *     |   |
++---+   +   +---+   +
+|         *         |
++   +---+   +---+---+
+|       | *   *   * |
++   +   +---+---+   +
+|   |       |     * |
++---+---+---+---+---+
+
+2. for a 8x5 braid maze and S=(0,0) and F=(7,4)
+        putStr (showSolvedMaze 1 8 5 (0,0) (7,4))
++---+---+---+---+---+---+---+---+
+| *     | *   *     |           |
++   +   +   +   +   +   +   +   +
+| * | *   * | * |               |
++   +   +---+   +---+   +---+---+
+| * | *   * | *   *             |
++   +---+   +   +   +---+---+   +
+| *     | *   * | *         |   |
++   +   +   +   +   +---+   +   +
+| *   *   *   * | *   *   *   * |
++---+---+---+---+---+---+---+---+

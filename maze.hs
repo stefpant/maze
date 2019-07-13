@@ -1,4 +1,4 @@
---import System.Random
+import System.Random
 import System.IO.Unsafe
 import Data.Set as Set
 
@@ -143,7 +143,7 @@ modifiedMZ xs q p w = if q>p then if (q-p)==1 then modMZ xs p 1
 
 modMZ :: [(Bool,Bool)] -> Int -> Int -> [(Bool,Bool)]
 modMZ ((x,y):xs) 1 a = if a==1 then (True,y):xs
-	                 else (x,True):xs
+                     else (x,True):xs
 
 modMZ (x:xs) s a = x:modMZ xs (s-1) a
 
@@ -240,7 +240,7 @@ deleteWall :: [(Bool,Bool)] -> (Bool,Bool) -> Int -> Int -> Int -> [(Bool,Bool)]
 deleteWall xs y n w h = if (((uWall xs y n w h)==1) Prelude.&& (n>w)) then rmWall xs (n-w) 0 --we can remove the UpWall
                         else if (((rWall xs y n w h)==1) Prelude.&& (mod n w /= 0)) then rmWall xs n 1 --RightWall
                              else if ((dWall xs y n w h)==1) Prelude.&& (n <= (w*(h-1))) then rmWall xs n 0 --DownWall
-								  else rmWall xs (n-1) 1 --here in case to remove LeftWall
+                                  else rmWall xs (n-1) 1 --here in case to remove LeftWall
 
 
 
@@ -248,7 +248,7 @@ deleteWall xs y n w h = if (((uWall xs y n w h)==1) Prelude.&& (n>w)) then rmWal
 --if a=1->remove right else remove down for the elem in s pos
 rmWall :: [(Bool,Bool)] -> Int -> Int -> [(Bool,Bool)]
 rmWall ((x,y):xs) 1 a = if a==1 then (False,y):xs
-	                 else (x,False):xs
+                     else (x,False):xs
 rmWall (x:xs) s a = x:rmWall xs (s-1) a
 
 
@@ -347,4 +347,22 @@ checkGoal2 (Maze xs width height) ys [(w,h)] stop previous = if [(w,h)] == stop 
                  (if (((uWall xs (findY xs (findN (w,h) width)) (findN (w,h) width) width height)== 0) Prelude.&& (elem (w,h-1) ys)==False)
                        then (checkGoal2 (Maze xs width height) ((w,h):ys) [(w,h-1)] stop [(w,h)])
                        else False)
+
+
+--first arg: 0 for perfect , 1 for braid , else error
+showSolvedMaze :: Int -> Int -> Int -> (Int, Int) -> (Int, Int) -> String
+showSolvedMaze 0 w h (a,b) (c,d) = if (a<w Prelude.&& c<w Prelude.&& b<h Prelude.&& d<h)
+                                    then do
+                                        m <- [kruskal ( makeMaze w h )]
+                                        showMaze m (solvePerfect m (a,b) (c,d))
+                                    else
+                                        "wrong indexes!\n"
+showSolvedMaze 1 w h (a,b) (c,d) = if (a<w Prelude.&& c<w Prelude.&& b<h Prelude.&& d<h)
+                                    then do
+                                        m <- [braid ( kruskal ( makeMaze w h ) )]
+                                        showMaze m (solveBraid m (a,b) (c,d))
+                                    else
+                                        "wrong indexes!\n"
+showSolvedMaze _ _ _ (_,_) (_,_) = "wrong arguments!\n"
+
 
